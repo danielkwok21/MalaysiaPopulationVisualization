@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+text {
+  font: bold 48px monospace
+  fill: #333
+}
+
+</style>
+
+<button>Click</button>
+<svg width="960" height="100"></svg>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+
+let numbers = [1, 2, 3, 4, 5, 6]
+let x = true
+
+let svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    g = svg.append("g").attr("transform", "translate(32," + (height / 2) + ")")
+
+function update(data) {
+
+  let text = g.selectAll("text")
+    .data(data)
+
+  text
+  .enter()
+  .append("text")
+  .attr("x", (d, i)=>{ return i * 32 })
+  .merge(text)
+  .text(function(d) { return d })
+
+  text.exit().remove()
+}
+
+// The initial display.
+update(numbers)
+
+d3.select('button').on('click', ()=>{
+  if(x){
+    update(numbers.map(n=>n*2))
+    x = false
+  }else{
+    update(numbers)
+    x = true
+  }
+})
+
+
+</script>

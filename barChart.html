@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  svg rect{
+    fill: steelblue;
+  }
+  text{
+    fill: black;
+    font-family: sans-serif;
+  }
+
+</style>
+
+<svg width="960" height="100"></svg>
+<button>Get sorted data</button>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script>
+  // data
+  let data = [10, 20, 50, 40, 30]
+  let sorted = true
+
+  //visual values
+  const chartPaddings = 
+  {
+    left: 30,
+    bottom: 10
+  }
+
+  const barPaddings = 
+  {
+    left: chartPaddings.left+20,
+    bottom: chartPaddings.bottom+10
+  }
+
+  let svgWidth = 600, svgHeight = 300, barPadding = 10
+  let barWidth = svgWidth/data.length
+
+  d3.select('button').on('click', ()=>{
+
+    // removes all current data
+    d3
+    .select('svg')
+    .selectAll('rect')
+    .data([])
+    .exit()
+    .remove()
+
+    if(sorted){
+      draw(data.concat().sort((a,b)=>{
+          return a-b
+      }))
+      sorted = false
+    }else{
+      draw(data)
+      sorted = true
+    }
+  })
+
+  function draw(data){
+    let svg = d3
+    .select('svg')
+    .attr('width', svgWidth)
+    .attr('height', svgHeight)
+
+    // a function to scale the bars such that it maximizes the height available
+    let xScale = d3
+    .scaleLinear()
+    .domain([0, d3.max(data)])
+    .range([0, svgWidth])
+    let yScale = d3
+    .scaleLinear()
+    .domain([0, d3.max(data)])    // 0 till max of dataset
+    .range([0, svgHeight])       // 0 till max height
+
+    // axis
+    let x_axis = d3.axisBottom().scale(xScale)
+    let y_axis = d3.axisLeft().scale(yScale)
+
+    // adding axis to the svg
+    svg
+    .append('g')
+    .attr('transform', 'translate('+chartPaddings.left+', '+(svgHeight-barPaddings.bottom)+')')
+    .call(x_axis)
+    svg
+    .append('g')
+    .attr('transform', 'translate('+chartPaddings.left+', '+chartPaddings.bottom+')')
+    .call(y_axis)
+
+    let barChart = svg
+    .selectAll('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('height', d=>yScale(d))
+    .attr('width', barWidth - barPadding)
+    .attr('y', d=>{
+      return svgHeight - yScale(d)
+    })
+    .attr('transform', (d, i)=>{
+      let translate = [barWidth*i+barPaddings.left, -barPaddings.bottom]
+      return 'translate('+translate+')'
+    })
+
+    let text = svg
+    .selectAll('text')
+    .data(data)
+    .enter()
+    .append('text')
+    .text(d=>d)
+    .attr('y', d=>svgHeight-d-2)
+    .attr('x', (d, i)=>{
+      return barWidth*i
+    })
+  }
+
+  draw(data)
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
