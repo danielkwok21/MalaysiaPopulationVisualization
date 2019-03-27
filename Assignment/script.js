@@ -39,7 +39,7 @@ let currentY = 1
 
 d3.tsv("populationdata.tsv",(error, data)=>{
   if (error) throw error // set axis
-    console.log(data)
+  console.log(data) 
 
   // clean up dataset
   data.forEach(d=>{
@@ -63,7 +63,7 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     })
   })
 
-  // sort data ascendingly by date
+  // sort data ascendingly by year
   data.sort((thisYear, thatYear)=>{
     return thisYear.year - thatYear.year
   })  
@@ -168,9 +168,10 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   })
 
   function sortAscendingly(data){
-    // sort data ascendingly
+
+    console.log(keys[currentX].key)
     let as_sorted = data.concat().sort((thisYear, thatYear)=>{
-      return thisYear[keys[currentX].key] - thatYear[keys[currentY].key]
+      return thisYear[keys[currentY].key] - thatYear[keys[currentY].key]
     })  
 
     return as_sorted
