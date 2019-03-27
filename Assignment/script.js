@@ -1,5 +1,5 @@
 let svg = d3.select("svg")
-let margin = {top: 20, right: 20, bottom: 30, left: 40}
+let margin = {top: 20, right: 20, bottom: 30, left: 100}
 let width = svg.attr("width") - margin.left - margin.right
 let height = svg.attr("height") - margin.top - margin.bottom
 
@@ -39,28 +39,34 @@ let currentY = 1
 
 d3.tsv("populationdata.tsv",(error, data)=>{
   if (error) throw error // set axis
+    console.log(data)
 
   // clean up dataset
   data.forEach(d=>{
     Object.keys(d).forEach(keys=>{
         let value = d[keys]
-        let parsed = parseInt(value)
+        if(value.includes('%')){
+            parsed = parseFloat((parseFloat(value)/100).toFixed(4))
+        }
+        else if(value.includes(',')){
+            parsed = parseFloat(value.replace(/,/g, ""))
+        }
+        else{
+            parsed = parseFloat(value)
+        }
+        
         if(!isNaN(parsed)){
             d[keys] = parsed
-            // includes percentage sign
-            if(value.includes('%')){
-                d[keys] = parsed/100
-            }
         }else{
-            d[keys] = 'NaN'        
-        }      
+            d[keys] = value        
+        }           
     })
   })
 
   drawChart(keys[currentX], keys[currentY], data)
 
   function drawChart(horz, vert, data){
-    console.log(data)
+    // console.log(data)
 
     x.domain(data.map(d=>d[horz.key]))
     y.domain([0, d3.max(data, d=>d[vert.key])])
@@ -111,8 +117,20 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     .exit()
     .remove()  
   }
+
+  
+  d3
+  .select('#population').on('click', ()=>{
+    console.log('population')
+      removeOldData()
+      currentX = 0
+      currentY = 1
+      drawChart(keys[currentX], keys[currentY], data)
+  })
+
   d3
   .select('#sort_ascending').on('click', ()=>{
+    console.log('sort ascendingly')
     if(!sorted){
       removeOldData()
       const as_data = sortAscendingly(data)
@@ -126,20 +144,15 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   })
 
   d3.select('#fertility_rate').on('click', ()=>{
+      console.log('fertility_rate')
       removeOldData()
       currentX = 0
       currentY = 2
       drawChart(keys[currentX], keys[currentY], data)
   })
 
-  d3.select('#world_population_percentage').on('click', ()=>{
-      removeOldData()
-      currentX = 0
-      currentY = 3
-      drawChart(keys[currentX], keys[currentY], data)
-  })
-
   d3.select('#global_rank').on('click', ()=>{
+      console.log('global_rank')
       removeOldData()
       currentX = 0
       currentY = 4

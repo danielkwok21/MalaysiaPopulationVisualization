@@ -1,4 +1,4 @@
-year	population	yearlyDifference	yearlyMigrants	medianAge	fertilityRate	density	urbanPopPercentage	urbanPop	worldPopulationPercentage	globalRank
+year	population	yearlyDifference	yearlyMigrants	migrants	medianAge	fertilityRate	density	urbanPopPercentage	urbanPop	worldPopPercentage	worldPop	globalRank
 2019	32,454,455	1.29%	411,997	50,000	28.1	2.09	99	77.10%	25,029,766	0.42%	7,714,576,923	45
 2018	32,042,458	1.32%	418,194	50,000	28.1	2.09	98	76.50%	24,509,005	0.42%	7,632,819,325	45
 2017	31,624,264	1.40%	436,999	50,000	28.1	2.09	96	75.80%	23,981,117	0.42%	7,550,262,101	45
