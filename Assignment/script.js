@@ -63,6 +63,11 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     })
   })
 
+  // sort data ascendingly by date
+  data.sort((thisYear, thatYear)=>{
+    return thisYear.year - thatYear.year
+  })  
+
   drawChart(keys[currentX], keys[currentY], data)
 
   function drawChart(horz, vert, data){
@@ -121,8 +126,9 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   
   d3
   .select('#population').on('click', ()=>{
-    console.log('population')
+      console.log('population')
       removeOldData()
+      sorted = false
       currentX = 0
       currentY = 1
       drawChart(keys[currentX], keys[currentY], data)
@@ -146,6 +152,7 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   d3.select('#fertility_rate').on('click', ()=>{
       console.log('fertility_rate')
       removeOldData()
+      sorted = false
       currentX = 0
       currentY = 2
       drawChart(keys[currentX], keys[currentY], data)
@@ -154,6 +161,7 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   d3.select('#global_rank').on('click', ()=>{
       console.log('global_rank')
       removeOldData()
+      sorted = false
       currentX = 0
       currentY = 4
       drawChart(keys[currentX], keys[currentY], data)
@@ -162,7 +170,7 @@ d3.tsv("populationdata.tsv",(error, data)=>{
   function sortAscendingly(data){
     // sort data ascendingly
     let as_sorted = data.concat().sort((thisYear, thatYear)=>{
-      return thisYear.population - thatYear.population
+      return thisYear[keys[currentX].key] - thatYear[keys[currentY].key]
     })  
 
     return as_sorted
