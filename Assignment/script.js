@@ -96,23 +96,24 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     .attr("text-anchor", "end")
     .text("Frequency")
 
-    // bars
+    // line
+    let line = d3
+    .line()
+    .x(d=>x(d[horz.key]))
+    .y(d=>y(d[vert.key]))
+
     g
-    .selectAll(".bar")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("class", "bar")
-    .attr("x", d=>x(d[horz.key]))
-    .attr("y", d=>y(d[vert.key]))
-    .attr("width", x.bandwidth())
-    .attr("height", d=>height - y(d[vert.key]))
-    .attr('fill', vert.color)
+    .append('path')
+    .data([data])
+    .attr('class', 'line')
+    .attr('d', line)
+    .attr('stroke', vert.color)
+
   }
 
   function removeOldData(){
     g
-    .selectAll(".bar")
+    .selectAll(".line")
     .data([])
     .exit()
     .remove()
