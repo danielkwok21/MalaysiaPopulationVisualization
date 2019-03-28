@@ -22,10 +22,6 @@ const keys = [
     color: '#6c757d'
   },
   {
-    key: 'worldPopulationPercentage',
-    color: '#28a745'
-  },
-  {
     key: 'globalRank',
     color: '#17a2b8'
   }
@@ -68,9 +64,9 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     return thisYear.year - thatYear.year
   })  
 
-  drawChart(keys[currentX], keys[currentY], data)
+  drawChart(keys[currentX], keys[currentY], data, 'dataset1')
 
-  function drawChart(horz, vert, data){
+  function drawChart(horz, vert, data, id){
     // console.log(data)
 
     x.domain(data.map(d=>d[horz.key]))
@@ -108,12 +104,15 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     .attr('class', 'line')
     .attr('d', line)
     .attr('stroke', vert.color)
+    .attr('id', id)
 
   }
 
-  function removeOldData(){
+  function removeOldData(removalChoice){
+    console.log('removalChoice: '+removalChoice)
+    const id = '#dataset'+removalChoice
     g
-    .selectAll(".line")
+    .select(id)
     .data([])
     .exit()
     .remove()
@@ -123,59 +122,77 @@ d3.tsv("populationdata.tsv",(error, data)=>{
     .exit()
     .remove()  
   }
-
   
   d3
-  .select('#population').on('click', ()=>{
+  .select('.dropdown1')
+  .select('#population')
+  .on('click', ()=>{
       console.log('population')
-      removeOldData()
+      removeOldData(1)
       sorted = false
       currentX = 0
       currentY = 1
-      drawChart(keys[currentX], keys[currentY], data)
+      drawChart(keys[currentX], keys[currentY], data, 'dataset1')
   })
 
   d3
-  .select('#sort_ascending').on('click', ()=>{
-    console.log('sort ascendingly')
-    if(!sorted){
-      removeOldData()
-      const as_data = sortAscendingly(data)
-      drawChart(keys[currentX], keys[currentY], as_data)
-      sorted = true
-    }else{
-      removeOldData()
-      drawChart(keys[currentX], keys[currentY], data)
-      sorted = false
-    }
-  })
-
-  d3.select('#fertility_rate').on('click', ()=>{
+  .select('.dropdown1')
+  .select('#fertility_rate')
+  .on('click', ()=>{
       console.log('fertility_rate')
-      removeOldData()
+      removeOldData(1)
       sorted = false
       currentX = 0
       currentY = 2
-      drawChart(keys[currentX], keys[currentY], data)
+      drawChart(keys[currentX], keys[currentY], data, 'dataset1')
   })
 
-  d3.select('#global_rank').on('click', ()=>{
+  d3
+  .select('.dropdown1')
+  .select('#global_rank')
+  .on('click', ()=>{
       console.log('global_rank')
-      removeOldData()
+      removeOldData(1)
       sorted = false
       currentX = 0
-      currentY = 4
-      drawChart(keys[currentX], keys[currentY], data)
+      currentY = 3
+      drawChart(keys[currentX], keys[currentY], data, 'dataset1')
   })
 
-  function sortAscendingly(data){
 
-    console.log(keys[currentX].key)
-    let as_sorted = data.concat().sort((thisYear, thatYear)=>{
-      return thisYear[keys[currentY].key] - thatYear[keys[currentY].key]
-    })  
+  d3
+  .select('.dropdown2')
+  .select('#population')
+  .on('click', ()=>{
+      console.log('population2')
+      removeOldData(2)
+      sorted = false
+      currentX = 0
+      currentY = 1
+      drawChart(keys[currentX], keys[currentY], data, 'dataset2')
+  })
 
-    return as_sorted
-  }
+  d3
+  .select('.dropdown2')
+  .select('#fertility_rate')
+  .on('click', ()=>{
+      console.log('fertility_rate2')
+      removeOldData(2)
+      sorted = false
+      currentX = 0
+      currentY = 2
+      drawChart(keys[currentX], keys[currentY], data, 'dataset2')
+  })
 
+  d3
+  .select('.dropdown2')
+  .select('#global_rank')
+  .on('click', ()=>{
+      console.log('global_rank2')
+      removeOldData(2)
+      sorted = false
+      currentX = 0
+      currentY = 3
+      drawChart(keys[currentX], keys[currentY], data, 'dataset2')
+  })
 })
