@@ -3,19 +3,19 @@
 <head>
   <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
-
+  <title>Malaysia Population Visualisation </title>
 </head> 
 
 <body>
   <div>
-    <div>
-      <svg width="800" height="500"></svg>
+    <div id="chart">
+      <svg width= "900" height="500"></svg>
     </div>
 
-    <div>
+    <div id="toggle">
 
-      <div style="display: inline-block" class="dropdown1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="dropdown1">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Series 1
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -25,11 +25,11 @@
         </div>
       </div>
 
-      <div style="display: inline-block">
+      <div>
         <h6> compared with </h6>
       </div>
 
-      <div style="display: inline-block" class="dropdown2">
+      <div class="dropdown2">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Series 2
         </button>

@@ -6,3 +6,16 @@
    fill: none;
    stroke-width: 2px;
 }
+
+svg{
+	display: block;
+	margin: auto;
+}
+
+#toggle{
+	text-align: center;
+}	
+
+#toggle > div{
+	display: inline-block;
+}
