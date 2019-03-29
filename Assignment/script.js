@@ -75,7 +75,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   function drawChart(horz, vert, data, id, axisLabels){
     d3
     .select('#dropdownMenuButton'+id)
-    .text(vert.key)
+    .text(vert.label)
 
     // console.log(data)
 
