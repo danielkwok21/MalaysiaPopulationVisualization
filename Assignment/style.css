@@ -12,10 +12,14 @@ svg{
 	margin: auto;
 }
 
-#toggle{
+#chart, #toggle{
 	text-align: center;
 }	
 
 #toggle > div{
 	display: inline-block;
+}
+
+text, h3, h6{
+	font-family: 'Lato', sans-serif;
 }

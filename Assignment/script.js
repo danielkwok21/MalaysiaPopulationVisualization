@@ -11,6 +11,10 @@ let g = svg.append('g')
 
 const keys = [
   {
+    key:'',
+    label:'' 
+  },
+  {
     key: 'year',
     label: 'Year'
   },
@@ -35,8 +39,8 @@ const colors = [
 
 // sort button event
 let sorted = false
-let currentX = 0
-let currentY = 1
+let currentX = 1
+let currentY = 2
 
 
 d3.tsv('populationdata.tsv',(error, data)=>{
@@ -71,16 +75,22 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   })  
 
   drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
+  drawChart(keys[1], keys[0], data, 2, {x: '', y: ''})
 
   function drawChart(horz, vert, data, id, axisLabels){
+    console.log('drawChart() id: '+id)
+
     d3
     .select('#dropdownMenuButton'+id)
     .text(vert.label)
 
     // console.log(data)
 
-    x.domain(data.map(d=>d[horz.key]))
-    y.domain([0, d3.max(data, d=>d[vert.key])])
+    if(horz)
+      x.domain(data.map(d=>d[horz.key]))
+
+    if(vert)
+      y.domain([0, d3.max(data, d=>d[vert.key])])
 
 
     if(id===1){
@@ -100,13 +110,13 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       .attr('x', width+margin.right)
       .attr('dy', '2em')
       .style('text-anchor', 'middle')
-      .attr('id', 'xLabel')
+      .attr('id', 'xLabel'+id)
       .text(axisLabels.x)
 
 
       // y axis
       g
-      .append('g')
+      .append('g')    
       .attr('class', 'axis axis--y')
       .call(d3.axisLeft(y).ticks(10))
 
@@ -114,12 +124,20 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       g
       .append('text')
       .attr('transform', 'rotate(-90)')
-      .attr('y', 1 - margin.left)
+      .attr('y', 1 - margin.left-20)
       .attr('x', 0 - (height / 2))
       .attr('dy', '2em')
       .style('text-anchor', 'middle')
-      .attr('id', 'yLabel')
+      .attr('id', 'yLabel'+id)
       .text(axisLabels.y)
+
+    // update chart title 
+    d3
+    .select('#chart')
+    .select('h3')
+    .text(axisLabels.y+' from '+
+      d3.min(data, d=>d[horz.key])+'-'+
+      d3.max(data, d=>d[horz.key]))
 
     }
 
@@ -141,37 +159,50 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   }
 
   function removeOldData(removalChoice){
-    console.log('removalChoice: '+removalChoice)
-    const id = '#dataset'+removalChoice
-
+    g
+    .select('#yLabel'+removalChoice)
+    .data([])
+    .exit()
+    .remove()
+    g
+    .select('#xLabel'+removalChoice)
+    .data([])
+    .exit()
+    .remove()
 
     if(removalChoice===1){
-      g
-      .select('#yLabel')
-      .data([])
-      .exit()
-      .remove()
-      g
-      .select('#xLabel')
-      .data([])
-      .exit()
-      .remove()
 
       g.selectAll('g')
       .data([])
       .exit()
       .remove()
-
     }
 
     g
-    .selectAll('#dataset'+removalChoice)
+    .select('#dataset'+removalChoice)
     .data([])
     .exit()
-    .remove() 
+    .remove()
 
-  
+
+    d3
+    .select('#chart')
+    .select('h3')
+    .data([])
+    .exit()
+    .remove()  
   }
+
+  d3
+  .select('.dropdown1')
+  .select('#none')
+  .on('click', ()=>{
+      removeOldData(1)
+      sorted = false
+      currentX = 1
+      currentY = 0
+      drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
+  })
   
   d3
   .select('.dropdown1')
@@ -179,8 +210,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(1)
       sorted = false
-      currentX = 0
-      currentY = 1
+      currentX = 1
+      currentY = 2
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
   })
 
@@ -190,8 +221,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(1)
       sorted = false
-      currentX = 0
-      currentY = 2
+      currentX = 1
+      currentY = 3
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
   })
 
@@ -201,11 +232,23 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(1)
       sorted = false
-      currentX = 0
-      currentY = 3
+      currentX = 1
+      currentY = 4
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
   })
 
+
+
+  d3
+  .select('.dropdown2')
+  .select('#none')
+  .on('click', ()=>{
+      removeOldData(2)
+      sorted = false
+      currentX = 1
+      currentY = 0
+      drawChart(keys[currentX], keys[currentY], data, 2, {x: keys[currentX].label, y: keys[currentY].label})
+  })
 
   d3
   .select('.dropdown2')
@@ -213,8 +256,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(2)
       sorted = false
-      currentX = 0
-      currentY = 1
+      currentX = 1
+      currentY = 2
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
   })
 
@@ -224,8 +267,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(2)
       sorted = false
-      currentX = 0
-      currentY = 2
+      currentX = 1
+      currentY = 3
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
   })
 
@@ -235,8 +278,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .on('click', ()=>{
       removeOldData(2)
       sorted = false
-      currentX = 0
-      currentY = 3
+      currentX = 1
+      currentY = 4
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
   })
 })
