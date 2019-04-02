@@ -12,11 +12,7 @@ let g = svg.append('g')
 const keys = [
   {
     key:'',
-    label:'' 
-  },
-  {
-    key: 'year',
-    label: 'Year'
+    label:'None' 
   },
   {
     key: 'population',
@@ -29,6 +25,10 @@ const keys = [
   {
     key: 'globalRank',
     label: 'Global Rank'
+  },
+  {
+    key: 'urbanPopPercentage',
+    label: 'Urban Population Percentage'
   }
 ]
 
@@ -67,21 +67,16 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   })  
 
   // set starting values
-  let currentX = 1
-  let currentY = 2
-  drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
-  drawChart(keys[1], keys[0], data, 2, {x: '', y: ''})
+  drawChart({x: 'year', y: keys[1].key}, {x: 'Year', y: keys[1].label} , data, 1)
+  drawChart({x: 'year', y: keys[0].key}, {x: '', y: ''}, data , 2)
 
-  function drawChart(horz, vert, data, id, axisLabels){
+  function drawChart(axisKeys, axisLabels, data, id){
     d3
     .select('#dropdownMenuButton'+id)
-    .text(vert.label)
+    .text(axisLabels.y)
 
-    if(horz)
-      x.domain(data.map(d=>d[horz.key]))
-
-    if(vert)
-      y.domain([0, d3.max(data, d=>d[vert.key])])
+    x.domain(data.map(d=>d[axisKeys.x]))
+    y.domain([0, d3.max(data, d=>d[axisKeys.y])])
 
 
     if(id===1){
@@ -125,8 +120,8 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     // line
     let line = d3
     .line()
-    .x(d=>x(d[horz.key]))
-    .y(d=>y(d[vert.key]))
+    .x(d=>x(d[axisKeys.x]))
+    .y(d=>y(d[axisKeys.y]))
     g
     .append('path')
     .data([data])
@@ -179,96 +174,41 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     .remove()
   }
 
+  d3
+  .select('#dropdownMenu1')
+  .selectAll('a')
+  .data(keys)
+  .enter()
+  .append('a')
+  .attr('id', d=>d.key)
+  .attr('class', 'dropdown-item')
+  .attr('href', '#')
+  .text(d=>d.label)
+  .on('click', d=>{
+    console.log(d.key)
+    console.log(d.label)
 
-  // dropdown 1
-  d3
-  .select('.dropdown1')
-  .select('#none')
-  .on('click', ()=>{
-      removeOldData(1)
-      
-      currentX = 1
-      currentY = 0
-      drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
-  })
-  
-  d3
-  .select('.dropdown1')
-  .select('#population')
-  .on('click', ()=>{
-      removeOldData(1)
-      
-      currentX = 1
-      currentY = 2
-      drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
-  })
-
-  d3
-  .select('.dropdown1')
-  .select('#fertility_rate')
-  .on('click', ()=>{
-      removeOldData(1)
-      
-      currentX = 1
-      currentY = 3
-      drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
-  })
-
-  d3
-  .select('.dropdown1')
-  .select('#global_rank')
-  .on('click', ()=>{
-      removeOldData(1)
-      
-      currentX = 1
-      currentY = 4
-      drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
+    removeOldData(1)
+    drawChart({x: 'year', y: d.key}, {x: 'Year', y:d.label}, data, 1)
   })
 
 
-
-  // dropdown 2
   d3
-  .select('.dropdown2')
-  .select('#none')
-  .on('click', ()=>{
-      removeOldData(2)
-      
-      currentX = 1
-      currentY = 0
-      drawChart(keys[currentX], keys[currentY], data, 2, {x: keys[currentX].label, y: keys[currentY].label})
+  .select('#dropdownMenu2')
+  .selectAll('a')
+  .data(keys)
+  .enter()
+  .append('a')
+  .attr('id', d=>d.key)
+  .attr('class', 'dropdown-item')
+  .attr('href', '#')
+  .text(d=>d.label)
+  .on('click', d=>{
+    console.log(d.key)
+    console.log(d.label)
+
+    removeOldData(2)
+    drawChart({x: 'year', y: d.key}, {x: 'Year', y:d.label}, data, 2)
   })
 
-  d3
-  .select('.dropdown2')
-  .select('#population')
-  .on('click', ()=>{
-      removeOldData(2)
-      
-      currentX = 1
-      currentY = 2
-      drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
-  })
-
-  d3
-  .select('.dropdown2')
-  .select('#fertility_rate')
-  .on('click', ()=>{
-      removeOldData(2)
-      
-      currentX = 1
-      currentY = 3
-      drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
-  })
-
-  d3
-  .select('.dropdown2')
-  .select('#global_rank')
-  .on('click', ()=>{
-      removeOldData(2)
-      
-      currentX = 1
-      currentY = 4
-      drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
-  })
 })
