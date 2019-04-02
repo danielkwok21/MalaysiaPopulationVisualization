@@ -78,13 +78,9 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   drawChart(keys[1], keys[0], data, 2, {x: '', y: ''})
 
   function drawChart(horz, vert, data, id, axisLabels){
-    console.log('drawChart() id: '+id)
-
     d3
     .select('#dropdownMenuButton'+id)
     .text(vert.label)
-
-    // console.log(data)
 
     if(horz)
       x.domain(data.map(d=>d[horz.key]))
@@ -113,7 +109,6 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       .attr('id', 'xLabel'+id)
       .text(axisLabels.x)
 
-
       // y axis
       g
       .append('g')    
@@ -132,7 +127,6 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       .text(axisLabels.y)
     }
 
-
     // line
     let line = d3
     .line()
@@ -146,6 +140,18 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     .attr('d', line)
     .attr('stroke', colors[id-1])
     .attr('id', 'dataset'+id)
+
+    // white curtain
+    let curtain = g
+    .append("rect")
+    .attr('x', 5)
+    .attr('y', -5)
+    .attr("width", width+10)
+    .attr("height", height)
+    .attr('fill', 'white')
+    .transition()
+    .attr('transform', 'translate('+width+')')
+    .duration(3000)
 
   }
 
@@ -174,16 +180,10 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     .data([])
     .exit()
     .remove()
-
-
-    d3
-    .select('#chart')
-    .select('h3')
-    .data([])
-    .exit()
-    .remove()  
   }
 
+
+  // dropdown 1
   d3
   .select('.dropdown1')
   .select('#none')
@@ -230,6 +230,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
 
 
 
+  // dropdown 2
   d3
   .select('.dropdown2')
   .select('#none')
