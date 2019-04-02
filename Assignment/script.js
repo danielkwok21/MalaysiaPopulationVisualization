@@ -130,15 +130,6 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       .style('text-anchor', 'middle')
       .attr('id', 'yLabel'+id)
       .text(axisLabels.y)
-
-    // update chart title 
-    d3
-    .select('#chart')
-    .select('h3')
-    .text(axisLabels.y+' from '+
-      d3.min(data, d=>d[horz.key])+'-'+
-      d3.max(data, d=>d[horz.key]))
-
     }
 
 
