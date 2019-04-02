@@ -136,9 +136,9 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     .attr('id', 'dataset'+id)
 
     // white curtain
-    let curtain = g
+    g
     .append("rect")
-    .id('curtain')
+    .attr('id', 'curtain')
     .attr('x', 5)
     .attr('y', -5)
     .attr("width", width+10)
