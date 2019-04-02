@@ -37,15 +37,9 @@ const colors = [
   '#6c757d'
 ]
 
-// sort button event
-let sorted = false
-let currentX = 1
-let currentY = 2
-
 
 d3.tsv('populationdata.tsv',(error, data)=>{
-  if (error) throw error // set axis
-  console.log(data) 
+  if (error) throw error 
 
   // clean up dataset
   data.forEach(d=>{
@@ -68,12 +62,13 @@ d3.tsv('populationdata.tsv',(error, data)=>{
         }           
     })
   })
-
-  // sort data ascendingly by year
   data.sort((thisYear, thatYear)=>{
     return thisYear.year - thatYear.year
   })  
 
+  // set starting values
+  let currentX = 1
+  let currentY = 2
   drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
   drawChart(keys[1], keys[0], data, 2, {x: '', y: ''})
 
@@ -132,7 +127,6 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     .line()
     .x(d=>x(d[horz.key]))
     .y(d=>y(d[vert.key]))
-
     g
     .append('path')
     .data([data])
@@ -144,6 +138,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
     // white curtain
     let curtain = g
     .append("rect")
+    .id('curtain')
     .attr('x', 5)
     .attr('y', -5)
     .attr("width", width+10)
@@ -156,16 +151,6 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   }
 
   function removeOldData(removalChoice){
-    g
-    .select('#yLabel'+removalChoice)
-    .data([])
-    .exit()
-    .remove()
-    g
-    .select('#xLabel'+removalChoice)
-    .data([])
-    .exit()
-    .remove()
 
     if(removalChoice===1){
 
@@ -174,6 +159,18 @@ d3.tsv('populationdata.tsv',(error, data)=>{
       .exit()
       .remove()
     }
+
+    g
+    .select('#yLabel'+removalChoice)
+    .data([])
+    .exit()
+    .remove()
+
+    g
+    .select('#xLabel'+removalChoice)
+    .data([])
+    .exit()
+    .remove()
 
     g
     .select('#dataset'+removalChoice)
@@ -189,7 +186,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#none')
   .on('click', ()=>{
       removeOldData(1)
-      sorted = false
+      
       currentX = 1
       currentY = 0
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
@@ -200,7 +197,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#population')
   .on('click', ()=>{
       removeOldData(1)
-      sorted = false
+      
       currentX = 1
       currentY = 2
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
@@ -211,7 +208,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#fertility_rate')
   .on('click', ()=>{
       removeOldData(1)
-      sorted = false
+      
       currentX = 1
       currentY = 3
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
@@ -222,7 +219,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#global_rank')
   .on('click', ()=>{
       removeOldData(1)
-      sorted = false
+      
       currentX = 1
       currentY = 4
       drawChart(keys[currentX], keys[currentY], data, 1, {x: keys[currentX].label, y: keys[currentY].label})
@@ -236,7 +233,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#none')
   .on('click', ()=>{
       removeOldData(2)
-      sorted = false
+      
       currentX = 1
       currentY = 0
       drawChart(keys[currentX], keys[currentY], data, 2, {x: keys[currentX].label, y: keys[currentY].label})
@@ -247,7 +244,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#population')
   .on('click', ()=>{
       removeOldData(2)
-      sorted = false
+      
       currentX = 1
       currentY = 2
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
@@ -258,7 +255,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#fertility_rate')
   .on('click', ()=>{
       removeOldData(2)
-      sorted = false
+      
       currentX = 1
       currentY = 3
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
@@ -269,7 +266,7 @@ d3.tsv('populationdata.tsv',(error, data)=>{
   .select('#global_rank')
   .on('click', ()=>{
       removeOldData(2)
-      sorted = false
+      
       currentX = 1
       currentY = 4
       drawChart(keys[currentX], keys[currentY], data, 2, {x: '',y: ''})
